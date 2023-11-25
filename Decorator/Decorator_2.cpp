@@ -3,22 +3,22 @@
 
 using namespace std;
 
-// Â÷·® ÀÎÅÍÆäÀÌ½º
+// ì°¨ëŸ‰ ì¸í„°í˜ì´ìŠ¤
 class CarInterface {
 public:
 	virtual string Option() = 0;
 	virtual int Price() = 0;
 };
 
-// ±âº» Â÷·® Å¬·¡½º
+// ê¸°ë³¸ ì°¨ëŸ‰ í´ë˜ìŠ¤
 class Car : public CarInterface
 {
 public:
 	int Price() override { return 4000; }
-	string Option() override { return "±âº»"; }
+	string Option() override { return "ê¸°ë³¸"; }
 };
 
-// Â÷·® µ¥ÄÚ·¹ÀÌÅÍ Å¬·¡½º
+// ì°¨ëŸ‰ ë°ì½”ë ˆì´í„° í´ë˜ìŠ¤
 class CarDecorator : public CarInterface
 {
 	CarInterface* carComponent;
@@ -30,7 +30,7 @@ public:
 	string Option() override { return (carComponent) ? carComponent->Option() : ""; }
 };
 
-// ºí·çÅõ½º ¿É¼Ç µ¥ÄÚ·¹ÀÌÅÍ Å¬·¡½º
+// ë¸”ë£¨íˆ¬ìŠ¤ ì˜µì…˜ ë°ì½”ë ˆì´í„° í´ë˜ìŠ¤
 class BluetoothOption : public CarDecorator
 {
 public:
@@ -40,7 +40,7 @@ public:
 	string Option() override { return CarDecorator::Option() + " + Bluetooth Option Addition"; }
 };
 
-// ¼±·çÇÁ ¿É¼Ç µ¥ÄÚ·¹ÀÌÅÍ Å¬·¡½º
+// ì„ ë£¨í”„ ì˜µì…˜ ë°ì½”ë ˆì´í„° í´ë˜ìŠ¤
 class SunroofOption : public CarDecorator
 {
 public:
@@ -52,7 +52,7 @@ public:
 
 int main()
 {
-	// ±âº» Â÷·® Å¬·¡½º¿¡ ¿É¼Ç Å¬·¡½ºµé Ãß°¡
+	// ê¸°ë³¸ ì°¨ëŸ‰ í´ë˜ìŠ¤ì— ì˜µì…˜ í´ë˜ìŠ¤ë“¤ ì¶”ê°€
 	CarInterface* carComponent = new SunroofOption(new BluetoothOption(new Car));
 
 	cout << "Price : " << carComponent->Price() << endl;
