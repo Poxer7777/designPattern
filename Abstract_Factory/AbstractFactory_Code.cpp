@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 
+// 추상 클래스 : 직업군
 class Character
 {
 public:
@@ -13,7 +14,6 @@ public:
     virtual void attack(Character* other) = 0; // 다른 캐릭터에게 공격을 하는 함수
 };
 
-// 추상 클래스 : 직업군
 class Warroirs : public Character {};
 class Archers : public Character {};
 class Magician : public Character {};
