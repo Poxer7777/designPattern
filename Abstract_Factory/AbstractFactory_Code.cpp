@@ -4,21 +4,21 @@ using namespace std;
 class Character
 {
 public:
-    int maxHp = 200; // Healthy Point (ü��)
-    int maxMp = 100; // Mana Point (����)
-    int Hp = 200;
-    int Mp = 100;
-    int power = 5;
-    string Type; // Type (�Ӽ�)
-    virtual void attack(Character* other) = 0;
+    int maxHp = 200; // Healthy Point (체력) : 최대 체력
+    int maxMp = 100; // Mana Point (마나) : 최대 마나
+    int Hp = 200; // 현재 체력
+    int Mp = 100; // 현재 마나
+    int power = 5; // Power : 공격력
+    string Type; // Type (속성)
+    virtual void attack(Character* other) = 0; // 다른 캐릭터에게 공격을 하는 함수
 };
 
-// �߻� Ŭ����
+// 추상 클래스 : 직업군
 class Warroirs : public Character {};
 class Archers : public Character {};
 class Magician : public Character {};
 
-// ���� Ŭ����
+// 구상 클래스 : 각 직업군의 각 속성의 구현
 class FireWarrior : public Warroirs {
 public:
     FireWarrior() {
@@ -39,10 +39,10 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Fire Slash / Damage : " << Damage << endl;
+            ::cout << "Fire Slash / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
@@ -66,10 +66,10 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Ice Slash / Damage : " << Damage << endl;
+            ::cout << "Ice Slash / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
@@ -93,10 +93,10 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Natural Slash / Damage : " << Damage << endl;
+            ::cout << "Natural Slash / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
@@ -121,10 +121,10 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Fire Arrow / Damage : " << Damage << endl;
+            ::cout << "Fire Arrow / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
@@ -148,10 +148,10 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Ice Arrow / Damage : " << Damage << endl;
+            ::cout << "Ice Arrow / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
@@ -175,10 +175,10 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Natural Arrow / Damage : " << Damage << endl;
+            ::cout << "Natural Arrow / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
@@ -203,10 +203,10 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Fire Blast / Damage : " << Damage << endl;
+            ::cout << "Fire Blast / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
@@ -230,10 +230,10 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Ice Blast / Damage : " << Damage << endl;
+            ::cout << "Ice Blast / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
@@ -257,15 +257,15 @@ public:
                 other->Hp -= Damage;
             }
 
-            cout << "Natural Blast / Damage : " << Damage << endl;
+            ::cout << "Natural Blast / Damage : " << Damage << endl;
         }
         else {
-            cout << "Needs more Mana" << endl;
+            ::cout << "Needs more Mana" << endl;
         }
     }
 };
 
-// �߻� ���丮
+// 추상 팩토리 : 객체를 생성하기 위한 팩토리
 class CharacterFactory
 {
 public:
@@ -274,7 +274,7 @@ public:
     virtual Character* createMagician() = 0;
 };
 
-// ���� ���丮
+// 구상 팩토리 : 추상팩토리에서 객체를 생성하는 내용 구현
 class FireFactory : public CharacterFactory
 {
     Character* createWarrior()
@@ -321,8 +321,9 @@ class GrassFactory : public CharacterFactory
     };
 };
 
+// 캐릭터의 스탯을 출력하는 함수
 void printStat(Character* ch) {
-    cout << "Hp : " << ch->Hp << endl
+    ::cout << "Hp : " << ch->Hp << endl
         << "Mp : " << ch->Mp << endl
         << "Power : " << ch->power << endl
         << "Type : " << ch->Type << endl;
@@ -330,24 +331,110 @@ void printStat(Character* ch) {
 
 int main()
 {
+    // 각 팩토리 생성
     CharacterFactory* fireFactory = new FireFactory;
     CharacterFactory* waterFactory = new WaterFactory;
     CharacterFactory* grassFactory = new GrassFactory;
 
-    Character* character1 = fireFactory->createMagician();
-    Character* character2 = grassFactory->createArcher();
+    // 캐릭터를 생성할 위치 생성
+    Character* character1 = nullptr;
+    Character* character2 = nullptr;
 
-    cout << "Charater 1" << endl;
+    // 생성할 캐릭터의 직업과 속성을 입력받을 변수
+    int classNum = 0;
+    int typeNum = 0;
+
+    ::cout << "1. 전사 / 2. 궁수 / 3. 마법사" << endl
+        << "1. 불 / 2. 물 / 3. 풀" << endl;
+
+    // 캐릭터 1 생성
+    ::cout << "캐릭터 1의 직업 : ";
+    ::cin >> classNum;
+    ::cout << "캐릭터 1의 속성 : ";
+    ::cin >> typeNum;
+
+    switch (classNum) {
+    case 1:
+        switch (typeNum) {
+        case 1:
+            character1 = fireFactory->createWarrior(); break;
+        case 2:
+            character1 = waterFactory->createWarrior(); break;
+        case 3:
+            character1 = grassFactory->createWarrior(); break;
+        } break;
+    case 2:
+        switch (typeNum) {
+        case 1:
+            character1 = fireFactory->createArcher(); break;
+        case 2:
+            character1 = waterFactory->createArcher(); break;
+        case 3:
+            character1 = grassFactory->createArcher(); break;
+        } break;
+    case 3:
+        switch (typeNum) {
+        case 1:
+            character1 = fireFactory->createMagician(); break;
+        case 2:
+            character1 = waterFactory->createMagician(); break;
+        case 3:
+            character1 = grassFactory->createMagician(); break;
+        } break;
+    }
+
+    // 캐릭터 2 생성
+    ::cout << "캐릭터 2의 직업 : ";
+    ::cin >> classNum;
+    ::cout << "캐릭터 2의 속성 : ";
+    ::cin >> typeNum;
+
+    switch (classNum) {
+    case 1:
+        switch (typeNum) {
+        case 1:
+            character2 = fireFactory->createWarrior(); break;
+        case 2:
+            character2 = waterFactory->createWarrior(); break;
+        case 3:
+            character2 = grassFactory->createWarrior(); break;
+        } break;
+    case 2:
+        switch (typeNum) {
+        case 1:
+            character2 = fireFactory->createArcher(); break;
+        case 2:
+            character2 = waterFactory->createArcher(); break;
+        case 3:
+            character2 = grassFactory->createArcher(); break;
+        } break;
+    case 3:
+        switch (typeNum) {
+        case 1:
+            character2 = fireFactory->createMagician(); break;
+        case 2:
+            character2 = waterFactory->createMagician(); break;
+        case 3:
+            character2 = grassFactory->createMagician(); break;
+        } break;
+    }
+
+    // 생성된 캐릭터들의 스탯 출력
+    ::cout << endl;
+    ::cout << "Charater 1" << endl;
     printStat(character1);
-    cout << endl;
-    cout << "Character 2" << endl;
+    ::cout << endl;
+    ::cout << "Character 2" << endl;
     printStat(character2);
 
-    cout << endl;
+    // 캐릭터 1이 캐릭터 2에게 공격
+    ::cout << endl;
     character1->attack(character2);
 
-    cout << endl << "Character 2 Hp : " << character2->Hp << endl;
+    // 캐릭터 2의 변화된 체력 출력
+    ::cout << endl << "Character 2 Hp : " << character2->Hp << endl;
 
+    // 동적할당 메모리 삭제
     delete character1;
     delete character2;
 
