@@ -1,0 +1,74 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 전략 클래스
+class WeaponStrategy
+{
+public:
+    float DelayTime;
+    string GunName;
+    int Bullet; 
+    string Sound;
+};
+
+// 구체적인 전략 클래스
+class pistol : public WeaponStrategy
+{
+public:
+    pistol() : WeaponStrategy{ 0.8, "권총", 5, "탕!"} {}
+};
+
+class machine_gun : public WeaponStrategy
+{
+public:
+    machine_gun() : WeaponStrategy{ 0.2, "기관총", 20, "두두두두두"} {}
+};
+
+class rifle : public WeaponStrategy
+{
+public:
+    rifle() : WeaponStrategy{ 1.0, "소총", 7, "타앙-!" } {}
+};
+
+// 스나이퍼
+class sniper
+{
+private:
+    WeaponStrategy* weapon; // 무기 전략을 가리키는 포인터
+public:
+    sniper() : weapon(nullptr) {};
+    void setWeapon(WeaponStrategy* newWeapon)
+    {
+        weapon = newWeapon;
+    }
+
+    void shoot()
+    {
+        cout << "총의 종류: " << weapon->GunName << endl;
+        cout << "총알: " << weapon->Bullet << endl;
+        cout << "소리: " << weapon->Sound << endl;
+    }
+};
+
+int main()
+{
+    // 무기 객체 생성
+    pistol P;
+    machine_gun M;
+    rifle R;
+
+    // 스나이퍼 객체 생성
+    sniper S;
+
+    S.setWeapon(&P);
+    S.shoot();
+
+    S.setWeapon(&M);
+    S.shoot();
+
+    S.setWeapon(&R);
+    S.shoot();
+
+    return 0;
+}
