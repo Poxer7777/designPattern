@@ -1,0 +1,61 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// 원형
+class villainPrototype
+{
+public:
+    virtual villainPrototype* clonevillain() const = 0;
+    virtual void display() const = 0;
+};
+
+// 구체적인 원형
+class monster : public villainPrototype
+{
+private:
+    string name;
+    string weapon;
+    double life;
+
+public:
+    monster(const string& name, const string& weapon, double life)
+        : name(name), weapon(weapon), life(life) {}
+
+    villainPrototype* clonevillain() const override
+    {
+        return new monster(*this);
+    }
+
+    void display() const override
+    {
+        cout << "villain name: " << name << endl;
+        cout << "villain weapon: " << weapon << endl;
+        cout << "villain life: " << life << endl;
+    }
+};
+
+// 클라이언트
+int main()
+{
+    // 초기 프로토타입 객체 생성
+    villainPrototype* monsterPrototype = new monster("Vampire", "spell", 100);
+
+    // 프로토타입 복제 후 새로운 객체 생성
+    villainPrototype* Vampire = monsterPrototype->clonevillain();
+    static_cast<monster*>(Vampire)->display();
+
+    // 프로토타입 변경해도 다른 객체에는 영향을 미치지 않음
+    delete monsterPrototype;
+    monsterPrototype = new monster("Goblin", "spear", 40);
+
+    villainPrototype* Goblin = monsterPrototype->clonevillain();
+    static_cast<monster*>(Goblin)->display();
+
+    // 메모리 정리
+    delete monsterPrototype;
+    delete Vampire;
+    delete Goblin;
+
+    return 0;
+}
